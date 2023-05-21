@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "24860006385",
+    "project_id": "carsystem-a0685",
+    "storage_bucket": "carsystem-a0685.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:24860006385:android:46171499a14575d1b49650",
+        "android_client_info": {
+          "package_name": "com.ozdamarsevval.carsystemapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "24860006385-gcd3fa09ri7lvdjg8qbc3sujp0d8tej5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ozdamarsevval.carsystemapp",
+            "certificate_hash": "4831ad39f63ee2e03062a1d6f154e46eefff4a14"
+          }
+        },
+        {
+          "client_id": "24860006385-hofd9gjl0f4hbj0lqihgd7e4n5i1kbj4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDShjiG71muW6RXzQcLXNGYnei4PR2qK-g"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "24860006385-hofd9gjl0f4hbj0lqihgd7e4n5i1kbj4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
