@@ -24,6 +24,11 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        listener()
+        observer()
+    }
+
+    private fun listener(){
         binding.text.setOnClickListener {
             startActivity(Intent(this@LoginActivity, RegisterActivity::class.java))
             finish()
@@ -35,9 +40,6 @@ class LoginActivity : AppCompatActivity() {
                 password = binding.userPassword.text.toString()
             )
         }
-        observer()
-
-
     }
 
     private fun observer(){
@@ -56,5 +58,8 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         }
+
     }
+
+
 }

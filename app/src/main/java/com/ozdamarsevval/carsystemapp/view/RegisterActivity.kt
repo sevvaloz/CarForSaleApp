@@ -26,6 +26,12 @@ class RegisterActivity : AppCompatActivity() {
         binding = ActivityRegisterBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        listener()
+        observer()
+
+    }
+
+    private fun listener(){
         binding.text.setOnClickListener {
             startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
             finish()
@@ -37,8 +43,6 @@ class RegisterActivity : AppCompatActivity() {
                 password = binding.userPassword.text.toString(),
                 user = getUserInfo())
         }
-        observer()
-
     }
 
     private fun getUserInfo(): User{
@@ -67,4 +71,6 @@ class RegisterActivity : AppCompatActivity() {
             }
         }
     }
+
+
 }
