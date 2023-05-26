@@ -4,6 +4,7 @@ import android.content.SharedPreferences
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.StorageReference
 import com.google.gson.Gson
 import com.ozdamarsevval.carsystemapp.repository.AuthRepository
 import com.ozdamarsevval.carsystemapp.repository.AuthRepositoryImlp
@@ -33,9 +34,10 @@ object RepositoryModule {
     @Provides
     @Singleton
     fun provideCarRepository(
-        db: FirebaseFirestore
+        db: FirebaseFirestore,
+        storageReference: StorageReference
     ): CarRepository {
-        return CarRepositoryImpl(db)
+        return CarRepositoryImpl(db, storageReference)
     }
 
 

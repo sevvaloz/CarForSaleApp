@@ -1,24 +1,27 @@
 package com.ozdamarsevval.carsystemapp.viewmodel
 
+import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.ozdamarsevval.carsystemapp.model.Car
 import com.ozdamarsevval.carsystemapp.repository.CarRepository
 import com.ozdamarsevval.carsystemapp.utils.UiState
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class CarViewModel @Inject constructor(
-    val repository: CarRepository
-): ViewModel() {
+        val repository: CarRepository
+    ): ViewModel() {
 
-    private val _car = MutableLiveData<UiState<List<Car>>>()
-    val car: LiveData<UiState<List<Car>>> get() = _car
+    private val _cars = MutableLiveData<UiState<List<Car>>>()
+    val cars: LiveData<UiState<List<Car>>> get() = _cars
 
-    private val _addCar = MutableLiveData<UiState<Pair<Car,String>>>()
-    val addCar: LiveData<UiState<Pair<Car, String>>> get() = _addCar
+    private val _addCar = MutableLiveData<UiState<String>>()
+    val addCar: LiveData<UiState<String>> get() = _addCar
 
     private val _updateCar = MutableLiveData<UiState<String>>()
     val updateCar: LiveData<UiState<String>> get() = _updateCar
@@ -28,9 +31,9 @@ class CarViewModel @Inject constructor(
 
 
     fun getCars() {
-        _car.value = UiState.Loading
-        repository.getCars() {carList ->
-            _car.value = carList
+        _cars.value = UiState.Loading
+        repository.getCars {
+            _cars.value = it
         }
     }
 
@@ -52,6 +55,13 @@ class CarViewModel @Inject constructor(
         _deleteCar.value = UiState.Loading
         repository.deleteCar(car) {
             _deleteCar.value = it
+        }
+    }
+
+    fun onUploadMultipleFile(fileUri: List<Uri>, onResult: (UiState<List<Uri>>) -> Unit){
+        onResult.invoke(UiState.Loading)
+        viewModelScope.launch {
+            repository.uploadMultipleFile(fileUri,onResult)
         }
     }
 

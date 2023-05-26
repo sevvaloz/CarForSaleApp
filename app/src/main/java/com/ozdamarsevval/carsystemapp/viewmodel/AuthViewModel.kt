@@ -3,6 +3,7 @@ package com.ozdamarsevval.carsystemapp.viewmodel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.auth.FirebaseUser
 import com.ozdamarsevval.carsystemapp.model.User
 import com.ozdamarsevval.carsystemapp.repository.AuthRepository
 import com.ozdamarsevval.carsystemapp.utils.UiState
@@ -11,16 +12,17 @@ import javax.inject.Inject
 
 @HiltViewModel
 class AuthViewModel @Inject constructor(
-    val repository: AuthRepository
+        val repository: AuthRepository
     ): ViewModel() {
 
     private val _register = MutableLiveData<UiState<String>>()
-    val register: LiveData<UiState<String>>
-        get() = _register
+    val register: LiveData<UiState<String>> get() = _register
 
     private val _login = MutableLiveData<UiState<String>>()
-    val login: LiveData<UiState<String>>
-        get() = _login
+    val login: LiveData<UiState<String>> get() = _login
+
+    private val _current = MutableLiveData<UiState<FirebaseUser?>>()
+    val cur: LiveData<UiState<FirebaseUser?>> get() = _current
 
 
     fun register(email: String, password: String, user: User) {

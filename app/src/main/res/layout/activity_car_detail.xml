@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".view.CarDetailActivity"
+    android:orientation="vertical">
+
+
+    <ImageView
+        android:id="@+id/choose_images"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:background="@drawable/ic_launcher_background"
+        android:layout_margin="5dp"
+        android:layout_alignParentTop="true"
+        android:visibility="visible">
+    </ImageView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_images"
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:visibility="invisible"/>
+
+    <EditText
+        android:id="@+id/carType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp"
+        android:hint="Type"
+        android:textSize="20sp"
+        android:inputType="text"
+        android:layout_below="@+id/rv_images"/>
+
+    <EditText
+        android:id="@+id/carYear"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/carType"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:ems="10"
+        android:hint="Year"
+        android:textSize="20sp"
+        android:inputType="text"/>
+
+    <EditText
+        android:id="@+id/carBrand"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/carYear"
+        android:ems="10"
+        android:layout_margin="5dp"
+        android:hint="Brand"
+        android:inputType="text"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/carModel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/carBrand"
+        android:ems="10"
+        android:layout_margin="5dp"
+        android:hint="Model"
+        android:inputType="text"
+        android:textSize="20sp" />
+    <EditText
+        android:id="@+id/carFuelType"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/carModel"
+        android:ems="10"
+        android:layout_margin="5dp"
+        android:hint="Fuel Type"
+        android:inputType="text"
+        android:textSize="20sp" />
+    <EditText
+        android:id="@+id/carMotor"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/carFuelType"
+        android:ems="10"
+        android:layout_margin="5dp"
+        android:hint="Motor"
+        android:inputType="text"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/carTransmission"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/carMotor"
+        android:ems="10"
+        android:layout_margin="5dp"
+        android:hint="Transmission"
+        android:inputType="text"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/carKilometer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/carTransmission"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:hint="Kilometer"
+        android:textSize="20sp" />
+
+    <EditText
+        android:id="@+id/carPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/carKilometer"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginBottom="5dp"
+        android:hint="Price"
+        android:textSize="20sp" />
+
+    <Button
+        android:id="@+id/okButton"
+        android:layout_width="match_parent"
+        android:layout_height="60dp"
+        android:text="OK"
+        android:textSize="20sp"
+        android:textAllCaps="false"
+        android:layout_margin="5dp"
+        android:layout_below="@+id/carPrice"/>
+
+</RelativeLayout>

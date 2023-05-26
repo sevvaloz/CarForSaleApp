@@ -3,6 +3,8 @@ package com.ozdamarsevval.carsystemapp.module
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.StorageReference
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,12 +14,6 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 @Module
 object FirebaseModule {
-
-/*    @Provides
-    @Singleton
-    fun provideFirebaseDatabaseInstance(): FirebaseDatabase{
-        return FirebaseDatabase.getInstance()
-    }*/
 
     @Provides
     @Singleton
@@ -29,5 +25,11 @@ object FirebaseModule {
     @Singleton
     fun provideFirebaseAuthInstance(): FirebaseAuth{
         return FirebaseAuth.getInstance()
+    }
+
+    @Singleton
+    @Provides
+    fun provideFirebaseStroageInstance(): StorageReference {
+        return FirebaseStorage.getInstance().getReference("app")
     }
 }

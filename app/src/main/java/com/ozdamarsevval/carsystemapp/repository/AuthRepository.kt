@@ -1,5 +1,7 @@
 package com.ozdamarsevval.carsystemapp.repository
 
+import com.google.firebase.auth.FirebaseUser
+import com.ozdamarsevval.carsystemapp.model.Car
 import com.ozdamarsevval.carsystemapp.model.User
 import com.ozdamarsevval.carsystemapp.utils.UiState
 

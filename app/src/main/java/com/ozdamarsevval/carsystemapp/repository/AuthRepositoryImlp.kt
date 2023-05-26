@@ -5,8 +5,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
+import com.ozdamarsevval.carsystemapp.model.Car
 import com.ozdamarsevval.carsystemapp.model.User
 import com.ozdamarsevval.carsystemapp.utils.UiState
 

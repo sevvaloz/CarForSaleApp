@@ -74,5 +74,4 @@
         android:layout_marginStart="18dp"
         android:layout_below="@+id/text"/>
 
-
 </RelativeLayout>

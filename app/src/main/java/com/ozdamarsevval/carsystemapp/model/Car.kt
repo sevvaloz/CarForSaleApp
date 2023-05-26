@@ -1,20 +1,22 @@
 package com.ozdamarsevval.carsystemapp.model
 
-import android.os.Parcelable
-import kotlinx.parcelize.Parcelize
+import com.google.firebase.firestore.ServerTimestamp
+import java.util.*
 
-@Parcelize
 data class Car(
     var id: String = "",
     var type: String = "",
-    var year: Int = 0,
+    var year: String = "",
     var brand: String = "",
     var model: String = "",
     var fuelType: String = "",
     var motor: String = "",
     var transmission: String = "",
-    var kilometer: Int = 0,
-    var price: Int = 0,
-    var photo: List<String> = arrayListOf()
-) : Parcelable
+    var kilometer: String = "",
+    var price: String = "",
+    var owner: String = "",
+    @ServerTimestamp
+    val date: Date = Date(),
+    val images: List<String> = arrayListOf()
+) : java.io.Serializable
 
