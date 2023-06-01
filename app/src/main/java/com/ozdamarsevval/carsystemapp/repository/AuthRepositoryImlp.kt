@@ -5,11 +5,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthUserCollisionException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
-import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
-import com.ozdamarsevval.carsystemapp.model.Car
 import com.ozdamarsevval.carsystemapp.model.User
+import com.ozdamarsevval.carsystemapp.utils.ADMIN
 import com.ozdamarsevval.carsystemapp.utils.UiState
 
 class AuthRepositoryImlp(
@@ -62,12 +61,12 @@ class AuthRepositoryImlp(
 
     override fun loginUser(email: String, password: String, result: (UiState<String>) -> Unit) {
         auth.signInWithEmailAndPassword(email,password)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    storeSession(id = task.result.user?.uid ?: ""){
-                        if (it == null){
+            .addOnCompleteListener { authResult ->
+                if (authResult.isSuccessful) {
+                    storeSession(id = authResult.result.user?.uid ?: ""){ user ->
+                        if (user == null){
                             result.invoke(UiState.Failure("Failed to store local session"))
-                        }else{
+                        } else{
                             result.invoke(UiState.Success("Login successfully!"))
                         }
                     }
@@ -83,8 +82,8 @@ class AuthRepositoryImlp(
     }
 
     override fun storeSession(id: String, result: (User?) -> Unit) {
-        db.collection("Users").document(id).get()
-            .addOnCompleteListener { task ->
+        val document = db.collection("Users").document(id).get()
+        document.addOnCompleteListener { task ->
                 if (task.isSuccessful){
                     val user = task.result.toObject(User::class.java)
                     appPref.edit().putString("user_session", gson.toJson(user)).apply()

@@ -44,25 +44,41 @@ class CarDetailActivity : AppCompatActivity() {
         }
     }
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_car_detail)
 
         supportActionBar?.title = "Details"
 
-        auth = Firebase.auth
-
         binding = ActivityCarDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        getCarInfo()
         listener()
         observer()
+    }
 
+    fun getCarInfo(){
+        objectCar = intent.getSerializableExtra("car") as? Car
+        objectCar.let { car ->
+            if(car != null){
+                isEditable(false)
+                binding.apply {
+                    carType.setText(car.type)
+                    carYear.setText(car.year)
+                    carBrand.setText(car.brand)
+                    carModel.setText(car.model)
+                    carFuelType.setText(car.fuelType)
+                    carMotor.setText(car.motor)
+                    carTransmission.setText(car.transmission)
+                    carKilometer.setText(car.kilometer)
+                    carPrice.setText(car.price)
+                }
+            }
+        }
     }
 
     private fun listener(){
-
         binding.okButton.setOnClickListener {
             startActivity(Intent(this@CarDetailActivity, MainActivity::class.java))
             finish()
@@ -70,7 +86,7 @@ class CarDetailActivity : AppCompatActivity() {
             okPressed()
         }
         binding.editButton.setOnClickListener {
-            isUI(true)
+            isEditable(true)
         }
         binding.deleteButton.setOnClickListener {
             objectCar.let { car ->
@@ -90,45 +106,12 @@ class CarDetailActivity : AppCompatActivity() {
             }
         }
 
-        objectCar = intent.getSerializableExtra("car") as? Car
-        objectCar.let { car ->
-            if(car != null){
-                binding.carType.apply {
-                    setText(car.type)
-                    isEnabled = false
-                }
-                binding.carYear.apply {
-                    setText(car.year)
-                    isEnabled = false
-                }
-                binding.carBrand.apply {
-                    setText(car.brand)
-                    isEnabled = false
-                }
-                binding.carModel.apply {
-                    setText(car.model)
-                    isEnabled = false
-                }
-                binding.carFuelType.apply {
-                    setText(car.fuelType)
-                    isEnabled = false
-                }
-                binding.carMotor.apply {
-                    setText(car.motor)
-                    isEnabled = false
-                }
-                binding.carTransmission.apply {
-                    setText(car.transmission)
-                    isEnabled = false
-                }
-                binding.carKilometer.apply {
-                    setText(car.kilometer)
-                    isEnabled = false
-                }
-                binding.carPrice.apply {
-                    setText(car.price)
-                    isEnabled = false
-                }
+        if(objectCar?.owner != Firebase.auth.currentUser?.email){
+            binding.apply {
+                deleteButton.isVisible = false
+                editButton.isVisible = false
+                okButton.isVisible = false
+                chooseImages.isClickable = false
             }
         }
 
@@ -146,7 +129,7 @@ class CarDetailActivity : AppCompatActivity() {
 
     }
 
-    private fun isUI(isDisable: Boolean) {
+    private fun isEditable(isDisable: Boolean) {
         binding.carType.isEnabled = isDisable
         binding.carPrice.isEnabled = isDisable
         binding.carKilometer.isEnabled = isDisable
@@ -156,33 +139,6 @@ class CarDetailActivity : AppCompatActivity() {
         binding.carFuelType.isEnabled = isDisable
         binding.carBrand.isEnabled = isDisable
         binding.carYear.isEnabled = isDisable
-    }
-
-
-    private val pickImagesLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            val _resultCode = it.resultCode
-            val _data = it.data
-            if(_resultCode == Activity.RESULT_OK){
-                val fileUri = _data?.data!!
-                imageUris.add(fileUri)
-                imagesAdapter.updateList(imageUris)
-                binding.rvImages.isVisible = true
-                binding.chooseImages.isVisible = false
-            } else{
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show()
-            }
-        }
-
-
-    private fun getImageUrls(): List<String> {
-        if(imageUris.isNotEmpty()){
-            return imageUris.map {
-                it.toString()
-            }
-        }else {
-            return objectCar?.images ?: arrayListOf()
-        }
     }
 
     private fun observer(){
@@ -221,7 +177,7 @@ class CarDetailActivity : AppCompatActivity() {
             transmission = binding.carTransmission.text.toString(),
             kilometer = (binding.carKilometer.text.toString()),
             price = (binding.carPrice.text.toString()),
-            owner = auth.currentUser?.email.toString(),
+            owner = Firebase.auth.currentUser?.email.toString(),
             date = Date(),
             images = getImageUrls()
         )
@@ -244,6 +200,32 @@ class CarDetailActivity : AppCompatActivity() {
                     }
                 }
             }
+        }
+    }
+
+    private val pickImagesLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            val _resultCode = it.resultCode
+            val _data = it.data
+            if(_resultCode == Activity.RESULT_OK){
+                val fileUri = _data?.data!!
+                imageUris.add(fileUri)
+                imagesAdapter.updateList(imageUris)
+                binding.rvImages.isVisible = true
+                binding.chooseImages.isVisible = false
+            } else{
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
+    private fun getImageUrls(): List<String> {
+        if(imageUris.isNotEmpty()){
+            return imageUris.map {
+                it.toString()
+            }
+        }else {
+            return objectCar?.images ?: arrayListOf()
         }
     }
 

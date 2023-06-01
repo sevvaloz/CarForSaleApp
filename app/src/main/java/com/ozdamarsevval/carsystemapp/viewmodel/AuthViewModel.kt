@@ -21,9 +21,6 @@ class AuthViewModel @Inject constructor(
     private val _login = MutableLiveData<UiState<String>>()
     val login: LiveData<UiState<String>> get() = _login
 
-    private val _current = MutableLiveData<UiState<FirebaseUser?>>()
-    val cur: LiveData<UiState<FirebaseUser?>> get() = _current
-
 
     fun register(email: String, password: String, user: User) {
         _register.value = UiState.Loading

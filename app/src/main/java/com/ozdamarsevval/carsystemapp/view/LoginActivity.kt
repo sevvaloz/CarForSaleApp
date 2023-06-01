@@ -5,8 +5,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.ozdamarsevval.carsystemapp.R
 import com.ozdamarsevval.carsystemapp.databinding.ActivityLoginBinding
+import com.ozdamarsevval.carsystemapp.utils.ADMIN
 import com.ozdamarsevval.carsystemapp.utils.UiState
 import com.ozdamarsevval.carsystemapp.viewmodel.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,9 +28,16 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+
+        if(Firebase.auth.currentUser != null){
+            startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+            finish()
+        }
+
         listener()
         observer()
     }
+
 
     private fun listener(){
         binding.text.setOnClickListener {
@@ -58,7 +69,6 @@ class LoginActivity : AppCompatActivity() {
                 }
             }
         }
-
     }
 
 
