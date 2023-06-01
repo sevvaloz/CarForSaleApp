@@ -8,8 +8,6 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.android.material.internal.NavigationMenu
-import com.google.android.material.navigation.NavigationView
 import com.ozdamarsevval.carsystemapp.R
 import com.ozdamarsevval.carsystemapp.adapter.CarAdapter
 import com.ozdamarsevval.carsystemapp.databinding.ActivityMainBinding
@@ -25,9 +23,9 @@ class MainActivity : AppCompatActivity() {
     private val authviewmodel: AuthViewModel by viewModels()
     private val carviewmodel: CarViewModel by viewModels()
     private val adapter by lazy {
-        CarAdapter(onItemClicked = {
-            pos, item -> startActivity(Intent(this@MainActivity, CarDetailActivity::class.java).putExtra("car", item))
-        })
+        CarAdapter { pos, item ->
+            startActivity(Intent(this@MainActivity, CarDetailActivity::class.java).putExtra("car", item))
+        }
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,7 +47,7 @@ class MainActivity : AppCompatActivity() {
         carviewmodel.getCars()
         carviewmodel.cars.observe(this){ carList ->
             when(carList){
-                UiState.Loading -> Toast.makeText(this, "Loading..", Toast.LENGTH_SHORT).show()
+                is UiState.Loading -> Toast.makeText(this, "Loading..", Toast.LENGTH_SHORT).show()
                 is UiState.Failure -> Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show()
                 is UiState.Success -> adapter.updateList(carList.data.toMutableList())
             }

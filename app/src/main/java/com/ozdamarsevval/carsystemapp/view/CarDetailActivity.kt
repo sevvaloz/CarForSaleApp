@@ -15,6 +15,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.ozdamarsevval.carsystemapp.R
+import com.ozdamarsevval.carsystemapp.adapter.CarAdapter
 import com.ozdamarsevval.carsystemapp.adapter.ImageAdapter
 import com.ozdamarsevval.carsystemapp.databinding.ActivityCarDetailBinding
 import com.ozdamarsevval.carsystemapp.model.Car
@@ -35,6 +36,12 @@ class CarDetailActivity : AppCompatActivity() {
     var objectCar: Car? = null
     val imagesAdapter by lazy{
         ImageAdapter()
+    }
+    val carAdapter by lazy {
+        CarAdapter { pos, item ->
+            startActivity(Intent(this@CarDetailActivity, MainActivity::class.java))
+            finish()
+        }
     }
 
 
@@ -60,27 +67,76 @@ class CarDetailActivity : AppCompatActivity() {
             startActivity(Intent(this@CarDetailActivity, MainActivity::class.java))
             finish()
 
-            onDonePressed()
+            okPressed()
+        }
+        binding.editButton.setOnClickListener {
+            isUI(true)
+        }
+        binding.deleteButton.setOnClickListener {
+            objectCar.let { car ->
+                if (car != null) {
+                    startActivity(Intent(this@CarDetailActivity, MainActivity::class.java))
+                    finish()
+
+                    carviewmodel.deleteCar(car)
+                    carviewmodel.cars.observe(this){ carList ->
+                        when(carList){
+                            is UiState.Loading -> Toast.makeText(this, "Loading..", Toast.LENGTH_SHORT).show()
+                            is UiState.Failure -> Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show()
+                            is UiState.Success -> carAdapter.updateList(carList.data.toMutableList())
+                        }
+                    }
+                }
+            }
         }
 
         objectCar = intent.getSerializableExtra("car") as? Car
         objectCar.let { car ->
-            binding.carType.setText(car?.type)
-            binding.carYear.setText(car?.year)
-            binding.carBrand.setText(car?.brand)
-            binding.carModel.setText(car?.model)
-            binding.carFuelType.setText(car?.fuelType)
-            binding.carMotor.setText(car?.motor)
-            binding.carTransmission.setText(car?.transmission)
-            binding.carKilometer.setText(car?.kilometer)
-            binding.carPrice.setText(car?.price)
+            if(car != null){
+                binding.carType.apply {
+                    setText(car.type)
+                    isEnabled = false
+                }
+                binding.carYear.apply {
+                    setText(car.year)
+                    isEnabled = false
+                }
+                binding.carBrand.apply {
+                    setText(car.brand)
+                    isEnabled = false
+                }
+                binding.carModel.apply {
+                    setText(car.model)
+                    isEnabled = false
+                }
+                binding.carFuelType.apply {
+                    setText(car.fuelType)
+                    isEnabled = false
+                }
+                binding.carMotor.apply {
+                    setText(car.motor)
+                    isEnabled = false
+                }
+                binding.carTransmission.apply {
+                    setText(car.transmission)
+                    isEnabled = false
+                }
+                binding.carKilometer.apply {
+                    setText(car.kilometer)
+                    isEnabled = false
+                }
+                binding.carPrice.apply {
+                    setText(car.price)
+                    isEnabled = false
+                }
+            }
         }
 
-        binding.rvImages.setOnClickListener {
-            val intent = Intent(Intent.ACTION_GET_CONTENT)
+        binding.chooseImages.setOnClickListener {
+            val _intent = Intent(Intent.ACTION_GET_CONTENT)
             intent.type = "image/*"
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-            pickImagesLauncher.launch(Intent.createChooser(intent, "Select Pictures"))
+            pickImagesLauncher.launch(Intent.createChooser(_intent, "Select Pictures"))
         }
 
         binding.rvImages.layoutManager = LinearLayoutManager(this@CarDetailActivity, LinearLayoutManager.HORIZONTAL, false)
@@ -90,17 +146,30 @@ class CarDetailActivity : AppCompatActivity() {
 
     }
 
+    private fun isUI(isDisable: Boolean) {
+        binding.carType.isEnabled = isDisable
+        binding.carPrice.isEnabled = isDisable
+        binding.carKilometer.isEnabled = isDisable
+        binding.carMotor.isEnabled = isDisable
+        binding.carModel.isEnabled = isDisable
+        binding.carTransmission.isEnabled = isDisable
+        binding.carFuelType.isEnabled = isDisable
+        binding.carBrand.isEnabled = isDisable
+        binding.carYear.isEnabled = isDisable
+    }
+
+
     private val pickImagesLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            val resultCode = it.resultCode
-            if(resultCode == Activity.RESULT_OK){
-                val data = it.data
-                val fileUri = data?.data
-                imageUris.add(fileUri!!)
+            val _resultCode = it.resultCode
+            val _data = it.data
+            if(_resultCode == Activity.RESULT_OK){
+                val fileUri = _data?.data!!
+                imageUris.add(fileUri)
                 imagesAdapter.updateList(imageUris)
                 binding.rvImages.isVisible = true
                 binding.chooseImages.isVisible = false
-            }else{
+            } else{
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show()
             }
         }
@@ -120,8 +189,22 @@ class CarDetailActivity : AppCompatActivity() {
         carviewmodel.addCar.observe(this){ state ->
             when(state){
                 UiState.Loading -> Toast.makeText(this, "Loading..", Toast.LENGTH_SHORT).show()
-                is UiState.Failure -> Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show()
+                is UiState.Failure -> Toast.makeText(this, "Ad failed", Toast.LENGTH_SHORT).show()
                 is UiState.Success -> Toast.makeText(this, "Car is on sale", Toast.LENGTH_SHORT).show()
+            }
+        }
+        carviewmodel.updateCar.observe(this){ state ->
+            when(state){
+                is UiState.Loading -> Toast.makeText(this, "Loading..", Toast.LENGTH_SHORT).show()
+                is UiState.Failure -> Toast.makeText(this, "Update failed!", Toast.LENGTH_SHORT).show()
+                is UiState.Success -> Toast.makeText(this, "Updated successfully.", Toast.LENGTH_SHORT).show()
+            }
+        }
+        carviewmodel.deleteCar.observe(this){ state ->
+            when(state){
+                is UiState.Loading -> Toast.makeText(this, "Loading..", Toast.LENGTH_SHORT).show()
+                is UiState.Failure -> Toast.makeText(this, "Delete failed!", Toast.LENGTH_SHORT).show()
+                is UiState.Success -> Toast.makeText(this, "Deleted successfully.", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -144,30 +227,22 @@ class CarDetailActivity : AppCompatActivity() {
         )
     }
 
-    private fun onDonePressed() {
-        if (imageUris.isNotEmpty()){
-            carviewmodel.onUploadMultipleFile(imageUris){ state ->
-                when (state) {
-                    is UiState.Loading -> {
-                        Toast.makeText(this, "Loading..", Toast.LENGTH_SHORT).show()
-                    }
-                    is UiState.Failure -> {
-                        Toast.makeText(this, "Error!", Toast.LENGTH_SHORT).show()
-                    }
-                    is UiState.Success -> {
-                        if (objectCar == null) {
-                            carviewmodel.addCar(getCar())
-                        } else {
-                            carviewmodel.updateCar(getCar())
-                        }
+    private fun okPressed() {
+        carviewmodel.onUploadMultipleFile(imageUris){ state ->
+            when (state) {
+                is UiState.Loading -> {
+                    Toast.makeText(this, "Loading..", Toast.LENGTH_SHORT).show()
+                }
+                is UiState.Failure -> {
+                    Toast.makeText(this, "Error!", Toast.LENGTH_SHORT).show()
+                }
+                is UiState.Success -> {
+                    if (objectCar == null) {
+                        carviewmodel.addCar(getCar())
+                    } else {
+                        carviewmodel.updateCar(getCar())
                     }
                 }
-            }
-        }else{
-            if (objectCar == null) {
-                carviewmodel.addCar(getCar())
-            } else {
-                carviewmodel.updateCar(getCar())
             }
         }
     }

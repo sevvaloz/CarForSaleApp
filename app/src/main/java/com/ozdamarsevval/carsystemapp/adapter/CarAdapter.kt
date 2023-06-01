@@ -1,5 +1,6 @@
 package com.ozdamarsevval.carsystemapp.adapter
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -7,7 +8,8 @@ import com.ozdamarsevval.carsystemapp.databinding.ItemCarBinding
 import com.ozdamarsevval.carsystemapp.model.Car
 import java.text.SimpleDateFormat
 
-class CarAdapter(val onItemClicked: (Int, Car) -> Unit
+class CarAdapter(
+    val onItemClicked: (Int, Car) -> Unit
 ): RecyclerView.Adapter<CarAdapter.CarViewHolder>() {
 
     val sdf = SimpleDateFormat("dd MMM yyyy")
@@ -18,7 +20,8 @@ class CarAdapter(val onItemClicked: (Int, Car) -> Unit
     }
 
     override fun onBindViewHolder(holder: CarViewHolder, position: Int) {
-        holder.bind(carList[position])
+        val currentCar = carList[position]
+        holder.bind(currentCar)
     }
 
     override fun getItemCount(): Int {

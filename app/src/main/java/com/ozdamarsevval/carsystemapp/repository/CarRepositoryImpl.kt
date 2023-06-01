@@ -36,8 +36,7 @@ class CarRepositoryImpl(
     override fun addCar(car: Car, result: (UiState<String>) -> Unit) {
         val document = db.collection("Cars").document()
         car.id = document.id
-        document
-            .set(car)
+        document.set(car)
             .addOnSuccessListener {
                 result.invoke(UiState.Success("Car is on sale"))
             }
