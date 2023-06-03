@@ -8,7 +8,6 @@ import com.google.firebase.auth.FirebaseAuthWeakPasswordException
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.gson.Gson
 import com.ozdamarsevval.carsystemapp.model.User
-import com.ozdamarsevval.carsystemapp.utils.ADMIN
 import com.ozdamarsevval.carsystemapp.utils.UiState
 
 class AuthRepositoryImlp(

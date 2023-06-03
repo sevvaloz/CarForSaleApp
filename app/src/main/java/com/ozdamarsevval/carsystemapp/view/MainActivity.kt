@@ -8,6 +8,8 @@ import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.ozdamarsevval.carsystemapp.R
 import com.ozdamarsevval.carsystemapp.adapter.CarAdapter
 import com.ozdamarsevval.carsystemapp.databinding.ActivityMainBinding
@@ -45,11 +47,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun observer(){
         carviewmodel.getCars()
-        carviewmodel.cars.observe(this){ carList ->
-            when(carList){
+        carviewmodel.cars.observe(this){
+            when(it){
                 is UiState.Loading -> Toast.makeText(this, "Loading..", Toast.LENGTH_SHORT).show()
                 is UiState.Failure -> Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show()
-                is UiState.Success -> adapter.updateList(carList.data.toMutableList())
+                is UiState.Success -> adapter.updateList(it.data.toMutableList())
             }
         }
     }
@@ -68,8 +70,26 @@ class MainActivity : AppCompatActivity() {
                 startActivity(Intent(this@MainActivity, LoginActivity::class.java))
                 finish()
             }
+            R.id.menuAdminPanel -> {
+                Toast.makeText(this, "Switched to Admin Panel", Toast.LENGTH_SHORT).show()
+                startActivity(Intent(this@MainActivity, AdminActivity::class.java))
+            }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu?): Boolean {
+        if(Firebase.auth.currentUser?.email == "admin@mail.com"){
+            val menuAdminPanelItem = menu?.findItem(R.id.menuAdminPanel)
+            menuAdminPanelItem?.isVisible = true
+
+            val menuProfileItem = menu?.findItem(R.id.menuProfile)
+            menuProfileItem?.isVisible = false
+
+            val menuSellCarItem = menu?.findItem(R.id.menuSellCar)
+            menuSellCarItem?.isVisible = false
+        }
+        return super.onPrepareOptionsMenu(menu)
     }
 
 }

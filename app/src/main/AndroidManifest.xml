@@ -15,6 +15,9 @@
         android:theme="@style/Theme.CarSystemApp"
         tools:targetApi="31">
         <activity
+            android:name=".view.CarSpecialityActivity"
+            android:exported="false" />
+        <activity
             android:name=".view.AdminActivity"
             android:exported="false" />
         <activity

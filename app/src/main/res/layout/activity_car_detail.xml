@@ -29,109 +29,230 @@
         android:layout_margin="5dp"
         android:visibility="gone"/>
 
-    <EditText
-        android:id="@+id/carType"
+    <TableRow
+        android:id="@+id/typeRow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/chooseImages"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
         android:layout_marginBottom="5dp"
-        android:hint="Type"
-        android:inputType="text"
-        android:textSize="20sp" />
-
-    <EditText
-        android:id="@+id/carYear"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/carType"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="5dp"
-        android:layout_marginBottom="5dp"
-        android:ems="10"
-        android:hint="Year"
-        android:textSize="20sp"
-        android:inputType="text"/>
-
-    <EditText
-        android:id="@+id/carBrand"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/carYear"
-        android:ems="10"
-        android:layout_margin="5dp"
-        android:hint="Brand"
-        android:inputType="text"
-        android:textSize="20sp" />
-
-    <EditText
-        android:id="@+id/carModel"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/carBrand"
-        android:ems="10"
-        android:layout_margin="5dp"
-        android:hint="Model"
-        android:inputType="text"
-        android:textSize="20sp" />
-    <EditText
-        android:id="@+id/carFuelType"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/carModel"
-        android:ems="10"
-        android:layout_margin="5dp"
-        android:hint="Fuel Type"
-        android:inputType="text"
-        android:textSize="20sp" />
-    <EditText
-        android:id="@+id/carMotor"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/carFuelType"
-        android:ems="10"
-        android:layout_margin="5dp"
-        android:hint="Motor"
-        android:inputType="text"
-        android:textSize="20sp" />
-
-    <EditText
-        android:id="@+id/carTransmission"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/carMotor"
-        android:ems="10"
-        android:layout_margin="5dp"
-        android:hint="Transmission"
-        android:inputType="text"
-        android:textSize="20sp" />
-
-    <EditText
-        android:id="@+id/carKilometer"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/carTransmission"
         android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="5dp"
-        android:hint="Kilometer"
-        android:textSize="20sp" />
+        android:layout_below="@+id/rv_images">
 
-    <EditText
-        android:id="@+id/carPrice"
+        <TextView
+            android:id="@+id/textviewType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Type: "
+            android:textSize="20sp">
+
+        </TextView>
+
+        <Spinner
+            android:id="@+id/spinnerType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:spinnerMode="dropdown">
+        </Spinner>
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/brandRow"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/carKilometer"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
         android:layout_marginBottom="5dp"
-        android:hint="Price"
-        android:textSize="20sp" />
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_below="@+id/typeRow">
+
+        <TextView
+            android:id="@+id/textviewBrand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Brand: "
+            android:textSize="20sp">
+
+        </TextView>
+
+        <Spinner
+            android:id="@+id/spinnerBrand"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:spinnerMode="dropdown">
+        </Spinner>
+    </TableRow>
+
+
+    <TableRow
+        android:id="@+id/modelRow"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="5dp"
+        android:layout_marginStart="5dp"
+        android:layout_below="@+id/brandRow">
+
+        <TextView
+            android:id="@+id/textviewModel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Model: "
+            android:textSize="20sp">
+
+        </TextView>
+
+        <Spinner
+            android:id="@+id/spinnerModel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="5dp"
+            android:spinnerMode="dropdown">
+        </Spinner>
+    </TableRow>
+
+    <LinearLayout
+        android:id="@+id/yearRow"
+        android:layout_margin="5dp"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_below="@+id/modelRow">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Year: "
+            android:textSize="20sp"
+            android:layout_gravity="bottom" />
+        <EditText
+            android:id="@+id/carYear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp"
+            android:inputType="text"/>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/fuelRow"
+        android:layout_margin="5dp"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_below="@+id/yearRow">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Fuel: "
+            android:textSize="20sp"
+            android:layout_gravity="bottom" />
+
+        <EditText
+            android:id="@+id/carFuelType"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/motorRow"
+        android:layout_margin="5dp"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_below="@+id/fuelRow">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Motor: "
+            android:textSize="20sp"
+            android:layout_gravity="bottom" />
+
+        <EditText
+            android:id="@+id/carMotor"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/transmissionRow"
+        android:layout_margin="5dp"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_below="@+id/motorRow">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Transmission: "
+            android:textSize="20sp"
+            android:layout_gravity="bottom" />
+
+        <EditText
+            android:id="@+id/carTransmission"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/kilometerRow"
+        android:layout_margin="5dp"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_below="@+id/transmissionRow">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Kilometer: "
+            android:textSize="20sp"
+            android:layout_gravity="bottom" />
+
+        <EditText
+            android:id="@+id/carKilometer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp" />
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/priceRow"
+        android:layout_margin="5dp"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:orientation="horizontal"
+        android:layout_below="@+id/kilometerRow">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Price: "
+            android:textSize="20sp"
+            android:layout_gravity="bottom" />
+
+        <EditText
+            android:id="@+id/carPrice"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="20sp" />
+    </LinearLayout>
 
     <Button
         android:id="@+id/okButton"
@@ -141,7 +262,7 @@
         android:textSize="20sp"
         android:textAllCaps="false"
         android:layout_margin="5dp"
-        android:layout_below="@+id/carPrice"/>
+        android:layout_below="@+id/priceRow"/>
 
     <RelativeLayout
         android:layout_width="match_parent"

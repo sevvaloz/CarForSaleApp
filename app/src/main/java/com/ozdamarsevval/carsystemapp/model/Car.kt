@@ -5,10 +5,10 @@ import java.util.*
 
 data class Car(
     var id: String = "",
-    var type: String = "",
+    var type: Type = Type("", ""),
     var year: String = "",
-    var brand: String = "",
-    var model: String = "",
+    var brand: Brand = Brand("",""),
+    var model: Model = Model("",""),
     var fuelType: String = "",
     var motor: String = "",
     var transmission: String = "",

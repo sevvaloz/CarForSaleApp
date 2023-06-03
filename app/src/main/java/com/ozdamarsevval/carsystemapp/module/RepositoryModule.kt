@@ -6,10 +6,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.StorageReference
 import com.google.gson.Gson
-import com.ozdamarsevval.carsystemapp.repository.AuthRepository
-import com.ozdamarsevval.carsystemapp.repository.AuthRepositoryImlp
-import com.ozdamarsevval.carsystemapp.repository.CarRepository
-import com.ozdamarsevval.carsystemapp.repository.CarRepositoryImpl
+import com.ozdamarsevval.carsystemapp.repository.*
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -38,6 +35,14 @@ object RepositoryModule {
         storageReference: StorageReference
     ): CarRepository {
         return CarRepositoryImpl(db, storageReference)
+    }
+
+    @Provides
+    @Singleton
+    fun provideCarSpecialityRepository(
+        db: FirebaseFirestore
+    ): CarSpecialityRepository {
+        return CarSpecialityRepositoryImlp(db)
     }
 
 

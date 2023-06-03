@@ -4,6 +4,11 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -18,9 +23,13 @@ import com.ozdamarsevval.carsystemapp.R
 import com.ozdamarsevval.carsystemapp.adapter.CarAdapter
 import com.ozdamarsevval.carsystemapp.adapter.ImageAdapter
 import com.ozdamarsevval.carsystemapp.databinding.ActivityCarDetailBinding
+import com.ozdamarsevval.carsystemapp.model.Brand
 import com.ozdamarsevval.carsystemapp.model.Car
+import com.ozdamarsevval.carsystemapp.model.Model
+import com.ozdamarsevval.carsystemapp.model.Type
 import com.ozdamarsevval.carsystemapp.utils.UiState
 import com.ozdamarsevval.carsystemapp.viewmodel.AuthViewModel
+import com.ozdamarsevval.carsystemapp.viewmodel.CarSpecialityViewModel
 import com.ozdamarsevval.carsystemapp.viewmodel.CarViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import java.util.*
@@ -28,10 +37,9 @@ import java.util.*
 @AndroidEntryPoint
 class CarDetailActivity : AppCompatActivity() {
 
-    private lateinit var auth: FirebaseAuth
     lateinit var binding: ActivityCarDetailBinding
-    private val authviewmodel: AuthViewModel by viewModels()
     private val carviewmodel: CarViewModel by viewModels()
+    private val csviewmodel: CarSpecialityViewModel by viewModels()
     var imageUris: MutableList<Uri> = arrayListOf()
     var objectCar: Car? = null
     val imagesAdapter by lazy{
@@ -43,6 +51,9 @@ class CarDetailActivity : AppCompatActivity() {
             finish()
         }
     }
+    lateinit var arrayAdapter: ArrayAdapter<String>
+    lateinit var selectedModel: Model
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -64,10 +75,10 @@ class CarDetailActivity : AppCompatActivity() {
             if(car != null){
                 isEditable(false)
                 binding.apply {
-                    carType.setText(car.type)
+                    spinnerType.setSelection(0)
                     carYear.setText(car.year)
-                    carBrand.setText(car.brand)
-                    carModel.setText(car.model)
+                    spinnerBrand.setSelection(0)
+                    spinnerModel.setSelection(0)
                     carFuelType.setText(car.fuelType)
                     carMotor.setText(car.motor)
                     carTransmission.setText(car.transmission)
@@ -76,9 +87,19 @@ class CarDetailActivity : AppCompatActivity() {
                 }
             }
         }
+
+       /* if(objectCar?.owner == Firebase.auth.currentUser?.email){
+            binding.apply {
+                this.deleteButton.isVisible = true
+                this.editButton.isVisible = true
+                this.okButton.isVisible = true
+                this.chooseImages.isClickable = true
+            }
+        }*/
     }
 
     private fun listener(){
+
         binding.okButton.setOnClickListener {
             startActivity(Intent(this@CarDetailActivity, MainActivity::class.java))
             finish()
@@ -106,15 +127,6 @@ class CarDetailActivity : AppCompatActivity() {
             }
         }
 
-        if(objectCar?.owner != Firebase.auth.currentUser?.email){
-            binding.apply {
-                deleteButton.isVisible = false
-                editButton.isVisible = false
-                okButton.isVisible = false
-                chooseImages.isClickable = false
-            }
-        }
-
         binding.chooseImages.setOnClickListener {
             val _intent = Intent(Intent.ACTION_GET_CONTENT)
             intent.type = "image/*"
@@ -130,14 +142,14 @@ class CarDetailActivity : AppCompatActivity() {
     }
 
     private fun isEditable(isDisable: Boolean) {
-        binding.carType.isEnabled = isDisable
+        binding.spinnerType.isEnabled = isDisable
         binding.carPrice.isEnabled = isDisable
         binding.carKilometer.isEnabled = isDisable
         binding.carMotor.isEnabled = isDisable
-        binding.carModel.isEnabled = isDisable
+        binding.spinnerModel.isEnabled = isDisable
         binding.carTransmission.isEnabled = isDisable
         binding.carFuelType.isEnabled = isDisable
-        binding.carBrand.isEnabled = isDisable
+        binding.spinnerBrand.isEnabled = isDisable
         binding.carYear.isEnabled = isDisable
     }
 
@@ -163,15 +175,48 @@ class CarDetailActivity : AppCompatActivity() {
                 is UiState.Success -> Toast.makeText(this, "Deleted successfully.", Toast.LENGTH_SHORT).show()
             }
         }
+        csviewmodel.getModels()
+        csviewmodel.models.observe(this){
+            when(it){
+                is UiState.Loading -> Toast.makeText(this, "Loading..", Toast.LENGTH_SHORT).show()
+                is UiState.Failure -> Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show()
+                is UiState.Success -> {
+                    val dataList = it.data
+                    val dataArrayList: Array<Model> = dataList.toTypedArray()
+                    val stringList: List<String> = dataArrayList.map { model -> model.name }
+                    arrayAdapter = ArrayAdapter(this@CarDetailActivity, android.R.layout.simple_spinner_item, stringList)
+                    arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item)
+                    binding.spinnerModel.adapter = arrayAdapter
+
+
+
+                    //
+                    val spinner: Spinner = binding.spinnerModel
+                    spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                            selectedModel = dataList[position]
+                        }
+
+                        override fun onNothingSelected(parent: AdapterView<*>?) {
+                            //selectedModel = null
+                        }
+                    }
+
+
+
+                }
+            }
+        }
+
     }
 
     private fun getCar(): Car{
         return Car(
             id = objectCar?.id ?: "",
-            type = binding.carType.text.toString(),
+            type = Type("", ""),
             year = binding.carYear.text.toString(),
-            brand = binding.carBrand.text.toString(),
-            model = binding.carModel.text.toString(),
+            brand = Brand("",""),
+            model = selectedModel,
             fuelType = binding.carFuelType.text.toString(),
             motor = binding.carMotor.text.toString(),
             transmission = binding.carTransmission.text.toString(),
@@ -217,7 +262,6 @@ class CarDetailActivity : AppCompatActivity() {
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show()
             }
         }
-
 
     private fun getImageUrls(): List<String> {
         if(imageUris.isNotEmpty()){

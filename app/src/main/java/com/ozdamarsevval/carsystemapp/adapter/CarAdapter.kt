@@ -37,7 +37,7 @@ class CarAdapter(
         fun bind(car: Car){
             binding.owner.text =  car.owner
             binding.date.text = sdf.format(car.date)
-            binding.desc.text = car.brand + " " + car.model
+            binding.desc.text = car.brand.name + " " + car.model.name
             binding.price.text = car.price
             binding.carItem.setOnClickListener {
                 onItemClicked.invoke(adapterPosition, car)

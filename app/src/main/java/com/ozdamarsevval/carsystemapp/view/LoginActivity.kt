@@ -1,19 +1,19 @@
 package com.ozdamarsevval.carsystemapp.view
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Menu
 import android.widget.Toast
 import androidx.activity.viewModels
-import com.google.firebase.auth.FirebaseAuth
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.ozdamarsevval.carsystemapp.R
 import com.ozdamarsevval.carsystemapp.databinding.ActivityLoginBinding
-import com.ozdamarsevval.carsystemapp.utils.ADMIN
 import com.ozdamarsevval.carsystemapp.utils.UiState
 import com.ozdamarsevval.carsystemapp.viewmodel.AuthViewModel
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
@@ -37,7 +37,6 @@ class LoginActivity : AppCompatActivity() {
         listener()
         observer()
     }
-
 
     private fun listener(){
         binding.text.setOnClickListener {
