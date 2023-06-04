@@ -13,6 +13,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
+import androidx.core.view.isGone
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.firebase.auth.ktx.auth
@@ -78,10 +79,10 @@ class CarDetailActivity : AppCompatActivity() {
             if(car != null){
                 isEditable(false)
                 binding.apply {
-                    //spinnerType.setSelection(1)
+                    typeVis.setText(car.type.name)
                     carYear.setText(car.year)
-                    //spinnerBrand.setSelection(1)
-                    //spinnerModel.setSelection(1)
+                    brandVis.setText(car.brand.name)
+                    modelVis.setText(car.model.name)
                     carFuelType.setText(car.fuelType)
                     carMotor.setText(car.motor)
                     carTransmission.setText(car.transmission)
@@ -237,15 +238,15 @@ class CarDetailActivity : AppCompatActivity() {
                 is UiState.Loading -> Toast.makeText(this, "Loading..", Toast.LENGTH_SHORT).show()
                 is UiState.Failure -> Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show()
                 is UiState.Success -> {
+                    val spinner: Spinner = binding.spinnerType
                     val dataList = it.data
                     val dataArrayList: Array<Type> = dataList.toTypedArray()
                     val stringList: List<String> = dataArrayList.map { model -> model.name }
                     typeAdapter = ArrayAdapter(this@CarDetailActivity, android.R.layout.simple_spinner_item, stringList)
                     typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item)
-                    binding.spinnerType.adapter = typeAdapter
+                    spinner.adapter = typeAdapter
 
                     //spinner selected item
-                    val spinner: Spinner = binding.spinnerType
                     spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                             selectedType = dataList[position]
@@ -258,7 +259,9 @@ class CarDetailActivity : AppCompatActivity() {
             }
         }
 
+
     }
+
 
     private fun getCar(): Car{
         return Car(

@@ -55,6 +55,15 @@
             android:padding="5dp"
             android:spinnerMode="dropdown">
         </Spinner>
+
+        <TextView
+            android:id="@+id/typeVis"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="sddfdfdffdf"
+            android:textSize="20sp"
+            android:visibility="gone">
+        </TextView>
     </TableRow>
 
     <TableRow
@@ -83,6 +92,16 @@
             android:padding="5dp"
             android:spinnerMode="dropdown">
         </Spinner>
+
+        <TextView
+            android:id="@+id/brandVis"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="sddfdfdffdf"
+            android:textSize="20sp"
+            android:visibility="gone">
+        </TextView>
+
     </TableRow>
 
 
@@ -112,6 +131,16 @@
             android:padding="5dp"
             android:spinnerMode="dropdown">
         </Spinner>
+
+        <TextView
+            android:id="@+id/modelVis"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="sddfdfdffdf"
+            android:textSize="20sp"
+            android:visibility="gone">
+        </TextView>
+
     </TableRow>
 
     <LinearLayout
