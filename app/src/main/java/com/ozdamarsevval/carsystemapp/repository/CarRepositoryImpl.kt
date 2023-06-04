@@ -11,6 +11,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.io.File
 
 class CarRepositoryImpl(
     val db: FirebaseFirestore,
@@ -71,7 +72,7 @@ class CarRepositoryImpl(
             val uri: List<Uri> = withContext(Dispatchers.IO) {
                 fileUri.map { image ->
                     async {
-                        storageReference.child("car").child(image.lastPathSegment ?: "${System.currentTimeMillis()}")
+                        storageReference.child(image.lastPathSegment ?: "${System.currentTimeMillis()}")
                             .putFile(image)
                             .await()
                             .storage

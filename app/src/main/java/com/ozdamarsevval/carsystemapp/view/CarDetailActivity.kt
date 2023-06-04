@@ -58,6 +58,31 @@ class CarDetailActivity : AppCompatActivity() {
     lateinit var typeAdapter: ArrayAdapter<String>
     lateinit var selectedType: Type
 
+    private val pickImagesLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == Activity.RESULT_OK) {
+                val data = it.data
+                if (data?.clipData != null) {
+                    val clipData = data.clipData
+                    for (i in 0 until clipData?.itemCount!!) {
+                        val uri = clipData.getItemAt(i)?.uri
+                        uri?.let {
+                            imageUris.add(it)
+                        }
+                    }
+                } else if (data?.data != null) {
+                    val uri = data.data
+                    uri?.let {
+                        imageUris.add(it)
+                    }
+                }
+                imagesAdapter.updateList(imageUris)
+                binding.rvImages.isVisible = true
+                binding.chooseImages.isVisible = false
+            } else {
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show()
+            }
+        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -79,10 +104,7 @@ class CarDetailActivity : AppCompatActivity() {
             if(car != null){
                 isEditable(false)
                 binding.apply {
-                    //spinnerType.setSelection(2)
                     carYear.setText(car.year)
-                    //spinnerBrand.setSelection(1)
-                    //spinnerModel.setSelection(1)
                     carFuelType.setText(car.fuelType)
                     carMotor.setText(car.motor)
                     carTransmission.setText(car.transmission)
@@ -102,7 +124,6 @@ class CarDetailActivity : AppCompatActivity() {
     }
 
     private fun listener(){
-
         binding.okButton.setOnClickListener {
             startActivity(Intent(this@CarDetailActivity, MainActivity::class.java))
             finish()
@@ -130,18 +151,17 @@ class CarDetailActivity : AppCompatActivity() {
             }
         }
 
-        binding.chooseImages.setOnClickListener {
-            val _intent = Intent(Intent.ACTION_GET_CONTENT)
-            intent.type = "image/*"
-            intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
-            pickImagesLauncher.launch(Intent.createChooser(_intent, "Select Pictures"))
-        }
-
         binding.rvImages.layoutManager = LinearLayoutManager(this@CarDetailActivity, LinearLayoutManager.HORIZONTAL, false)
         binding.rvImages.adapter = imagesAdapter
         imageUris = objectCar?.images?.map { it.toUri() }?.toMutableList() ?: arrayListOf()
         imagesAdapter.updateList(imageUris)
 
+        binding.chooseImages.setOnClickListener {
+            val _intent = Intent(Intent.ACTION_GET_CONTENT)
+            _intent.type = "image/*"
+            _intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
+            pickImagesLauncher.launch(Intent.createChooser(_intent, "Select Pictures"))
+        }
     }
 
     private fun isEditable(isDisable: Boolean) {
@@ -274,7 +294,6 @@ class CarDetailActivity : AppCompatActivity() {
             }
         }
 
-
     }
 
     private fun getCar(): Car{
@@ -295,50 +314,20 @@ class CarDetailActivity : AppCompatActivity() {
         )
     }
 
-    private fun okPressed() {
-        carviewmodel.onUploadMultipleFile(imageUris){ state ->
-            when (state) {
-                is UiState.Loading -> {
-                    Toast.makeText(this, "Loading..", Toast.LENGTH_SHORT).show()
-                }
-                is UiState.Failure -> {
-                    Toast.makeText(this, "Error!", Toast.LENGTH_SHORT).show()
-                }
-                is UiState.Success -> {
-                    if (objectCar == null) {
-                        carviewmodel.addCar(getCar())
-                    } else {
-                        carviewmodel.updateCar(getCar())
-                    }
-                }
-            }
-        }
-    }
-
-    private val pickImagesLauncher =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            val _resultCode = it.resultCode
-            val _data = it.data
-            if(_resultCode == Activity.RESULT_OK){
-                val fileUri = _data?.data!!
-                imageUris.add(fileUri)
-                imagesAdapter.updateList(imageUris)
-                binding.rvImages.isVisible = true
-                binding.chooseImages.isVisible = false
-            } else{
-                Toast.makeText(this, "Cancelled", Toast.LENGTH_SHORT).show()
-            }
-        }
-
     private fun getImageUrls(): List<String> {
         if(imageUris.isNotEmpty()){
-            return imageUris.map {
-                it.toString()
-            }
+            return imageUris.map { it.toString() }
         }else {
             return objectCar?.images ?: arrayListOf()
         }
     }
 
+    private fun okPressed() {
+        if (objectCar == null) {
+            carviewmodel.addCar(getCar())
+        } else {
+            carviewmodel.updateCar(getCar())
+        }
+    }
 
 }
