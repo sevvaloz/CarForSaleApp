@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        supportActionBar?.title = "Welcome " + (Firebase.auth.currentUser?.email)?.substringBefore("@")
+        supportActionBar?.title = "Hello " + (Firebase.auth.currentUser?.email)
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)

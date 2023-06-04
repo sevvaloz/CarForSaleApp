@@ -68,21 +68,21 @@ class CarDetailActivity : AppCompatActivity() {
         binding = ActivityCarDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        objectCar = intent.getSerializableExtra("car") as? Car
         getCarInfo()
         listener()
         observer()
     }
 
     fun getCarInfo(){
-        objectCar = intent.getSerializableExtra("car") as? Car
         objectCar.let { car ->
             if(car != null){
                 isEditable(false)
                 binding.apply {
-                    typeVis.setText(car.type.name)
+                    //spinnerType.setSelection(2)
                     carYear.setText(car.year)
-                    brandVis.setText(car.brand.name)
-                    modelVis.setText(car.model.name)
+                    //spinnerBrand.setSelection(1)
+                    //spinnerModel.setSelection(1)
                     carFuelType.setText(car.fuelType)
                     carMotor.setText(car.motor)
                     carTransmission.setText(car.transmission)
@@ -196,6 +196,11 @@ class CarDetailActivity : AppCompatActivity() {
                     spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                             selectedModel = dataList[position]
+                            val sm: Model? = objectCar?.model
+                            val smIndex = dataList.indexOfFirst { it.id == sm?.id }
+                            if(smIndex != -1){
+                                spinner.setSelection(smIndex)
+                            }
                         }
                         override fun onNothingSelected(parent: AdapterView<*>?) {
                             //selectedModel = null
@@ -223,6 +228,11 @@ class CarDetailActivity : AppCompatActivity() {
                     spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                             selectedBrand = dataList[position]
+                            val sb: Brand? = objectCar?.brand
+                            val sbIndex = dataList.indexOfFirst { it.id == sb?.id }
+                            if(sbIndex != -1){
+                                spinner.setSelection(sbIndex)
+                            }
                         }
                         override fun onNothingSelected(parent: AdapterView<*>?) {
                             //selectedModel = null
@@ -250,6 +260,11 @@ class CarDetailActivity : AppCompatActivity() {
                     spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                             selectedType = dataList[position]
+                            val st: Type? = objectCar?.type
+                            val stIndex = dataList.indexOfFirst { it.id == st?.id }
+                            if(stIndex != -1){
+                                spinner.setSelection(stIndex)
+                            }
                         }
                         override fun onNothingSelected(parent: AdapterView<*>?) {
                             //selectedModel = null
@@ -261,7 +276,6 @@ class CarDetailActivity : AppCompatActivity() {
 
 
     }
-
 
     private fun getCar(): Car{
         return Car(
