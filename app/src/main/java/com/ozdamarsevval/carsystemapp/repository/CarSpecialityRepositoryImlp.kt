@@ -50,12 +50,42 @@ class CarSpecialityRepositoryImlp(
             }
     }
 
+    override fun getBrands(result: (UiState<List<Brand>>) -> Unit) {
+        db.collection("Brands").get()
+            .addOnSuccessListener { query ->
+                val brands = arrayListOf<Brand>()
+                for(document in query){
+                    val brand = document.toObject(Brand::class.java)
+                    brands.add(brand)
+                }
+                result.invoke(UiState.Success(brands))
+            }
+            .addOnFailureListener {
+                result.invoke(UiState.Failure(it.localizedMessage))
+            }
+    }
+
     override fun addType(type: Type, result: (UiState<String>) -> Unit) {
         val document = db.collection("Types").document()
         type.id = document.id
         document.set(type)
             .addOnSuccessListener {
                 result.invoke(UiState.Success("New car type added"))
+            }
+            .addOnFailureListener {
+                result.invoke(UiState.Failure(it.localizedMessage))
+            }
+    }
+
+    override fun getTypes(result: (UiState<List<Type>>) -> Unit) {
+        db.collection("Types").get()
+            .addOnSuccessListener { query ->
+                val types = arrayListOf<Type>()
+                for(document in query){
+                    val type = document.toObject(Type::class.java)
+                    types.add(type)
+                }
+                result.invoke(UiState.Success(types))
             }
             .addOnFailureListener {
                 result.invoke(UiState.Failure(it.localizedMessage))

@@ -4,7 +4,6 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -16,7 +15,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.net.toUri
 import androidx.core.view.isVisible
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.ozdamarsevval.carsystemapp.R
@@ -28,7 +26,6 @@ import com.ozdamarsevval.carsystemapp.model.Car
 import com.ozdamarsevval.carsystemapp.model.Model
 import com.ozdamarsevval.carsystemapp.model.Type
 import com.ozdamarsevval.carsystemapp.utils.UiState
-import com.ozdamarsevval.carsystemapp.viewmodel.AuthViewModel
 import com.ozdamarsevval.carsystemapp.viewmodel.CarSpecialityViewModel
 import com.ozdamarsevval.carsystemapp.viewmodel.CarViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -51,8 +48,14 @@ class CarDetailActivity : AppCompatActivity() {
             finish()
         }
     }
-    lateinit var arrayAdapter: ArrayAdapter<String>
+    lateinit var modelAdapter: ArrayAdapter<String>
     lateinit var selectedModel: Model
+
+    lateinit var brandAdapter: ArrayAdapter<String>
+    lateinit var selectedBrand: Brand
+
+    lateinit var typeAdapter: ArrayAdapter<String>
+    lateinit var selectedType: Type
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -75,27 +78,26 @@ class CarDetailActivity : AppCompatActivity() {
             if(car != null){
                 isEditable(false)
                 binding.apply {
-                    spinnerType.setSelection(0)
+                    //spinnerType.setSelection(1)
                     carYear.setText(car.year)
-                    spinnerBrand.setSelection(0)
-                    spinnerModel.setSelection(0)
+                    //spinnerBrand.setSelection(1)
+                    //spinnerModel.setSelection(1)
                     carFuelType.setText(car.fuelType)
                     carMotor.setText(car.motor)
                     carTransmission.setText(car.transmission)
                     carKilometer.setText(car.kilometer)
                     carPrice.setText(car.price)
                 }
+                if(objectCar?.owner != Firebase.auth.currentUser?.email){
+                    binding.apply {
+                        this.deleteButton.isVisible = false
+                        this.editButton.isVisible = false
+                        this.okButton.isVisible = false
+                        this.chooseImages.isClickable = false
+                    }
+                }
             }
         }
-
-       /* if(objectCar?.owner == Firebase.auth.currentUser?.email){
-            binding.apply {
-                this.deleteButton.isVisible = true
-                this.editButton.isVisible = true
-                this.okButton.isVisible = true
-                this.chooseImages.isClickable = true
-            }
-        }*/
     }
 
     private fun listener(){
@@ -184,26 +186,74 @@ class CarDetailActivity : AppCompatActivity() {
                     val dataList = it.data
                     val dataArrayList: Array<Model> = dataList.toTypedArray()
                     val stringList: List<String> = dataArrayList.map { model -> model.name }
-                    arrayAdapter = ArrayAdapter(this@CarDetailActivity, android.R.layout.simple_spinner_item, stringList)
-                    arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item)
-                    binding.spinnerModel.adapter = arrayAdapter
+                    modelAdapter = ArrayAdapter(this@CarDetailActivity, android.R.layout.simple_spinner_item, stringList)
+                    modelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item)
+                    binding.spinnerModel.adapter = modelAdapter
 
-
-
-                    //
+                    //spinner selected item
                     val spinner: Spinner = binding.spinnerModel
                     spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                             selectedModel = dataList[position]
                         }
-
                         override fun onNothingSelected(parent: AdapterView<*>?) {
                             //selectedModel = null
                         }
                     }
+                }
+            }
+        }
 
+        csviewmodel.getBrands()
+        csviewmodel.brands.observe(this){
+            when(it){
+                is UiState.Loading -> Toast.makeText(this, "Loading..", Toast.LENGTH_SHORT).show()
+                is UiState.Failure -> Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show()
+                is UiState.Success -> {
+                    val dataList = it.data
+                    val dataArrayList: Array<Brand> = dataList.toTypedArray()
+                    val stringList: List<String> = dataArrayList.map { model -> model.name }
+                    brandAdapter = ArrayAdapter(this@CarDetailActivity, android.R.layout.simple_spinner_item, stringList)
+                    brandAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item)
+                    binding.spinnerBrand.adapter = brandAdapter
 
+                    //spinner selected item
+                    val spinner: Spinner = binding.spinnerBrand
+                    spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                            selectedBrand = dataList[position]
+                        }
+                        override fun onNothingSelected(parent: AdapterView<*>?) {
+                            //selectedModel = null
+                        }
+                    }
+                }
+            }
+        }
 
+        csviewmodel.getTypes()
+        csviewmodel.types.observe(this){
+            when(it){
+                is UiState.Loading -> Toast.makeText(this, "Loading..", Toast.LENGTH_SHORT).show()
+                is UiState.Failure -> Toast.makeText(this, "Failed", Toast.LENGTH_SHORT).show()
+                is UiState.Success -> {
+                    val dataList = it.data
+                    val dataArrayList: Array<Type> = dataList.toTypedArray()
+                    val stringList: List<String> = dataArrayList.map { model -> model.name }
+                    typeAdapter = ArrayAdapter(this@CarDetailActivity, android.R.layout.simple_spinner_item, stringList)
+                    typeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_item)
+                    binding.spinnerType.adapter = typeAdapter
+
+                    //spinner selected item
+                    val spinner: Spinner = binding.spinnerType
+                    spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                        override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                            selectedType = dataList[position]
+                        }
+                        override fun onNothingSelected(parent: AdapterView<*>?) {
+                            //selectedModel = null
+                        }
+                    }
                 }
             }
         }
@@ -213,9 +263,9 @@ class CarDetailActivity : AppCompatActivity() {
     private fun getCar(): Car{
         return Car(
             id = objectCar?.id ?: "",
-            type = Type("", ""),
+            type = selectedType,
             year = binding.carYear.text.toString(),
-            brand = Brand("",""),
+            brand = selectedBrand,
             model = selectedModel,
             fuelType = binding.carFuelType.text.toString(),
             motor = binding.carMotor.text.toString(),

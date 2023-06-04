@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -8,29 +8,14 @@
     tools:context=".view.AdminActivity">
 
     <Button
-        android:id="@+id/toModelButton"
+        android:id="@+id/toButton"
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_margin="5dp"
-        android:text="ADD CAR MODEL">
-    </Button>
-    <Button
-        android:id="@+id/toBrandButton"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_margin="5dp"
-        android:text="ADD CAR BRAND"
-        android:layout_below="@+id/toModelButton">
-    </Button>
-    <Button
-        android:id="@+id/toTypeButton"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_margin="5dp"
-        android:text="ADD CAR TYPE"
-        android:layout_below="@+id/toBrandButton">
+        android:text="ADD CAR SPECIALITY"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
     </Button>
 
-
-
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

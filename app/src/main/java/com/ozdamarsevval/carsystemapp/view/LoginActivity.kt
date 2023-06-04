@@ -28,6 +28,7 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        supportActionBar?.title = "Login"
 
         if(Firebase.auth.currentUser != null){
             startActivity(Intent(this@LoginActivity, MainActivity::class.java))

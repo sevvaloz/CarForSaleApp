@@ -49,7 +49,7 @@ class CarRepositoryImpl(
         val document = db.collection("Cars").document(car.id)
         document.set(car)
             .addOnSuccessListener {
-                result.invoke(UiState.Success("Car has been update successfully"))
+                result.invoke(UiState.Success("Car updated"))
             }
             .addOnFailureListener {
                 result.invoke(UiState.Failure(it.localizedMessage))
@@ -59,7 +59,7 @@ class CarRepositoryImpl(
     override fun deleteCar(car: Car, result: (UiState<String>) -> Unit) {
         db.collection("Cars").document(car.id).delete()
             .addOnSuccessListener {
-                result.invoke(UiState.Success("Car deleted successfully"))
+                result.invoke(UiState.Success("Car deleted"))
             }
             .addOnFailureListener {
                 result.invoke(UiState.Failure(it.message))

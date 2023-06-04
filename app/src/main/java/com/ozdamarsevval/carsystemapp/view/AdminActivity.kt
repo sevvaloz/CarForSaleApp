@@ -37,7 +37,7 @@ class AdminActivity : AppCompatActivity() {
     private fun listener() {
 
         binding.apply {
-            toModelButton.setOnClickListener {
+            toButton.setOnClickListener {
                 startActivity(Intent(this@AdminActivity, CarSpecialityActivity::class.java))
             }
         }

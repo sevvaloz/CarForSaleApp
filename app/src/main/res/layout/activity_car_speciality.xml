@@ -24,7 +24,8 @@
         android:layout_marginTop="5dp"
         android:layout_marginEnd="5dp"
         android:layout_marginBottom="5dp"
-        android:hint="Add Brand"></EditText>
+        android:hint="Add Brand">
+    </EditText>
 
     <EditText
         android:id="@+id/typeTxt"
@@ -41,7 +42,7 @@
     <Button
         android:id="@+id/addButton"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="60dp"
         android:layout_alignParentBottom="true"
         android:text="ADD"
         android:layout_margin="5dp">

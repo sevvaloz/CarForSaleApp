@@ -10,5 +10,7 @@ interface CarSpecialityRepository {
     fun addModel(model: Model, result: (UiState<String>) -> Unit)
     fun getModels(result: (UiState<List<Model>>) -> Unit)
     fun addBrand(brand: Brand, result: (UiState<String>) -> Unit)
+    fun getBrands(result: (UiState<List<Brand>>) -> Unit)
     fun addType(type: Type, result: (UiState<String>) -> Unit)
+    fun getTypes(result: (UiState<List<Type>>) -> Unit)
 }
